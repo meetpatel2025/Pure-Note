@@ -64,7 +64,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         holder.itemBinding.colorID.setBackgroundColor(color)
         holder.itemView.setOnClickListener {
             val direction = HomeFragmentDirections.
-                    actionHomeFragmentToNewNoteFragment(currentNote)
+                    actionHomeFragmentToNewNoteFragment()
 
             it.findNavController().navigate(direction)
 

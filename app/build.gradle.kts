@@ -1,10 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
 //    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.androidx.navigation.safeargs.kotlin)
-    alias(libs.plugins.kotlin.parcelize)
+//    alias(libs.plugins.ksp)
+//    alias(libs.plugins.androidx.navigation.safeargs.kotlin)
+//    alias(libs.plugins.kotlin.parcelize)
+//    id("kotlin-parcelize")
 
+    id("com.google.devtools.ksp")
+    alias(libs.plugins.navigation.safe.args)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -56,8 +60,11 @@ dependencies {
     implementation(libs.lifecycle.livedata)
 
     // Room + KSP
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
+//    implementation(libs.room.runtime)
+//    ksp(libs.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     // Coroutines (updated from 1.3.9 to 1.8.1)
     implementation(libs.coroutines.android)
