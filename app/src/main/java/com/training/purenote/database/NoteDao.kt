@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.training.purenote.model.Note
-
 @Dao
 interface NoteDao {
 
@@ -21,9 +20,9 @@ interface NoteDao {
     @Delete
     suspend fun deleteNote(note: Note)
 
-    @Query("SELECT * FROM NOTES ORDER BY noteID DESC")
-    fun getAllNotes() : LiveData<List<Note>>
+    @Query("SELECT * FROM notes ORDER BY noteID DESC")
+    fun getAllNotes(): LiveData<List<Note>>
 
-    @Query("SELECT * FROM NOTES WHERE noteTitle LIKE:query OR noteBody LIKE:query")
-    fun searchNote(query: String?) : LiveData<List<Note>>
+    @Query("SELECT * FROM notes WHERE noteTitle LIKE :query OR noteBody LIKE :query")
+    fun searchNote(query: String?): LiveData<List<Note>>
 }

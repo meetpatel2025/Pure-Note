@@ -5,10 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-//import kotlinx.parcelize.Parcelize
-
 @Entity(tableName = "notes")
-//@Parcelize
 data class Note (
     @PrimaryKey(autoGenerate = true)
     val noteID : Int,

@@ -1,13 +1,13 @@
 package com.training.purenote.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.training.purenote.MainActivity
@@ -16,9 +16,11 @@ import com.training.purenote.adapter.NoteAdapter
 import com.training.purenote.databinding.FragmentHomeBinding
 import com.training.purenote.model.Note
 import com.training.purenote.viewmodel.NoteViewModel
+import androidx.appcompat.widget.SearchView
 
 
-class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextListener {
+
+class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextListener{
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -28,8 +30,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setHasOptionsMenu(true)
-
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -52,37 +53,41 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             )
         }
     }
-
     private fun setUpRecyclerView() {
         noteAdapter = NoteAdapter()
 
+        noteAdapter.onItemClick = { note ->
+            val action = HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(note)
+            requireView().findNavController().navigate(action)
+        }
+
         binding.notesList.apply {
-            layoutManager = StaggeredGridLayoutManager(
-                2,
-                StaggeredGridLayoutManager.VERTICAL
-            )
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             setHasFixedSize(true)
             adapter = noteAdapter
         }
 
+        notesViewModel.getAllNotes().observe(viewLifecycleOwner) {
+            Log.d("HOME_DEBUG", "Notes size: ${it.size}")
+            noteAdapter.differ.submitList(it)
+        }
+
         activity?.let {
-            notesViewModel.getAllNotes().observe(
-                viewLifecycleOwner, { note ->
-                    noteAdapter.differ.submitList(note)
-                    updateUI(note)
-                }
-            )
+            notesViewModel.getAllNotes().observe(viewLifecycleOwner, { note ->
+                noteAdapter.differ.submitList(note)
+                updateUI(note)
+            })
         }
     }
 
 
-    private fun HomeFragment.updateUI(note: List<Note>?) {
-        if (note != null) {
+    private fun updateUI(note: List<Note>?) {
+        if (note != null && note.isNotEmpty()) {
+            binding.notesList.visibility = View.VISIBLE
             binding.noteCard.visibility = View.GONE
-            binding.notesList.visibility = View.VISIBLE
         } else {
-            binding.notesList.visibility = View.VISIBLE
             binding.notesList.visibility = View.GONE
+            binding.noteCard.visibility = View.VISIBLE
         }
     }
 

@@ -59,7 +59,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         val noteTitle = binding.editNoteTitle.text.toString().trim()
         val noteBody = binding.editNoteBody.text.toString().trim()
 
-        if(noteBody.isNotEmpty()){
+        if(noteTitle.isNotEmpty() && noteBody.isNotEmpty()){
             val note = Note(0, noteTitle, noteBody)
             notesViewModel.addNote(note)
 
@@ -67,11 +67,11 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                 "Notes Saved Successfully!",
                 Toast.LENGTH_LONG).show()
 
-            view.findNavController().navigate(R.id.action_newNoteFragment_to_homeFragment)
-
+//            view.findNavController().navigate(R.id.action_newNoteFragment_to_homeFragment)
+            view.findNavController().popBackStack()
         }else{
             Toast.makeText(mView.context,
-                "Please enter note title",
+                "Please enter note title or description",
                 Toast.LENGTH_LONG).show()
         }
     }
